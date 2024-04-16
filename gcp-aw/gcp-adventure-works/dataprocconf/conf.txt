@@ -1,0 +1,11 @@
+gcloud dataproc clusters create aw-cluster \
+  --region us-central1 \
+  --public-ip-address \
+  --properties=^#^dataproc:conda.packages='google-cloud-secret-manager==2.16.3' \
+  --image-version 2.2.10-debian12 \
+  --master-machine-type n2-standard-2 \
+  --master-boot-disk-size 100 \
+  --num-workers 2 \
+  --worker-machine-type n2-standard-2 \
+  --worker-boot-disk-size 100 \
+  --metadata "enable-cloud-sql-hive-metastore=false"

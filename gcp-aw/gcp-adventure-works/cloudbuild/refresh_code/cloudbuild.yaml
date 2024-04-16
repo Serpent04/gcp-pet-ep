@@ -1,0 +1,10 @@
+substitutions:
+  _SOURCE_REPO: 'gcp-adventure-works'
+  _SOURCE_BUCKET: 'gs://pyspark-scripts-aw-vk/'
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['source', 'repos', 'clone', '$_SOURCE_REPO', 'repo']
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '-c', 'repo/pyspark_scripts/', '$_SOURCE_BUCKET']

@@ -1,0 +1,9 @@
+substitutions:
+  _STORAGE_BUCKET: 'gs://anime-pet-dags'
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['source', 'repos', 'clone', 'anime-airflow-dags', 'repo']
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '-c', 'repo/dags/', '$_STORAGE_BUCKET/dags/']

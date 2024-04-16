@@ -1,0 +1,14 @@
+substitutions:
+  _SOURCE_REPO: 'gcp-anime-recom'
+  _SOURCE_BUCKET_HIVE: 'gs://hive-scripts-vk/' 
+  _SOURCE_BUCKET_PYSPARK: 'gs://pyspark-scripts-vk/' 
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['source', 'repos', 'clone', '$_SOURCE_REPO', 'repo']
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '-c', 'repo/hive_scripts/', '$_SOURCE_BUCKET_HIVE']
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '-c', 'repo/pyspark_scripts/', '$_SOURCE_BUCKET_PYSPARK']

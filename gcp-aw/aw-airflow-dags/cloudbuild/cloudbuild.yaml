@@ -1,0 +1,9 @@
+substitutions:
+  _STORAGE_BUCKET: 'gs://aw-composer-bucket'
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['source', 'repos', 'clone', 'aw-airflow-dags', 'repo']
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['rsync', '-r', '-c', 'repo/dags/', '$_STORAGE_BUCKET/dags/']

@@ -1,0 +1,16 @@
+substitutions:
+  _COMPOSER_ENV_NAME: 'animepetcomposer'
+  _LOCATION: 'us-central1'
+  _STORAGE_BUCKET: 'gs://anime-pet-dags/'
+  _PROJECT_ID: 'gcp-anime-recom'
+  _DAG_ID: 'anime-dag'
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['composer', 'environments', 'create', '$_COMPOSER_ENV_NAME', '--location', '$_LOCATION',
+           '--image-version', 'composer-2.6.6-airflow-2.6.3', '--environment-size', 'small',
+           '--storage-bucket', '$_STORAGE_BUCKET']
+  
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['composer', 'environments', 'run', '$_COMPOSER_ENV_NAME', '--location', 
+           '$_LOCATION', 'dags', 'trigger', '--', '$_DAG_ID']
