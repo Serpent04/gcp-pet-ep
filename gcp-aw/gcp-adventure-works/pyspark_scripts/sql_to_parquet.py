@@ -22,7 +22,7 @@ secret_client = SecretManagerServiceClient()
 secret_name = 'projects/874629723717/secrets/psql-secret/versions/1'
 response = secret_client.access_secret_version(request={'name': secret_name})
 
-SQL_HOST = '34.71.235.218'
+SQL_HOST = 'localhost'
 SQL_PORT = '5432'
 DB_NAME = 'Adventureworks'
 

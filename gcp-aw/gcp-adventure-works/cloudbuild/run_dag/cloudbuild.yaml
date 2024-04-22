@@ -4,8 +4,19 @@ substitutions:
   _STORAGE_BUCKET: 'gs://aw-composer-bucket/'
   _PROJECT_ID: 'gcp-adventure-works'
   _DAG_ID: 'aw-dag'
+  _CLUSTER_NAME: 'aw-cluster'
+  _CLOUD_SQL_CONNECTION: 'gcp-adventure-works:us-central1:psql-aw=tcp:5432'
+  _INIT_SHELL_SCRIPT: 'gs://shell-scripts-vk/cloud-sql-proxy.sh'
 
 steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['dataproc', 'clusters', 'create', '$_CLUSTER_NAME', '--region', '$_LOCATION',
+           '--initialization-actions', '$_INIT_SHELL_SCRIPT', '--single-node',
+           '--properties', '^#^dataproc:conda.packages=google-cloud-secret-manager==2.16.3',
+           '--image-version', '2.2.10-debian12', '--master-machine-type', 'n2-standard-2',
+           '--master-boot-disk-size', '100', '--metadata', 'enable-cloud-sql-hive-metastore=false',
+           '--metadata', 'additional-cloud-sql-instances=$_CLOUD_SQL_CONNECTION']
+           
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['composer', 'environments', 'create', '$_COMPOSER_ENV_NAME', '--location', '$_LOCATION',
            '--image-version', 'composer-2.6.6-airflow-2.6.3', '--environment-size', 'small',

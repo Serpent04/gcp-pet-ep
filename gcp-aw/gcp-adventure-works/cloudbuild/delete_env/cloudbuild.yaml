@@ -1,0 +1,14 @@
+substitutions:
+  _COMPOSER_ENV_NAME: 'aw-composer'
+  _CLUSTER_NAME: 'aw-cluster'
+  _LOCATION: 'us-central1'
+
+steps:
+
+  - name: gcr.io/cloud-builders/gcloud
+    args: ['composer', 'environments', 'delete', '$_COMPOSER_ENV_NAME', '--location', 
+           '$_LOCATION', '--quiet']
+
+  - name: gcr.io/cloud-builders/gcloud
+    args: ['dataproc', 'clusters', 'delete', '$_CLUSTER_NAME', '--region', 
+           '$_LOCATION', '--quiet']
