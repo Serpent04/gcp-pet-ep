@@ -2,8 +2,6 @@ import airflow
 from airflow import DAG
 
 from airflow.utils.dates import days_ago
-from airflow.providers.google.cloud.operators.dataproc import DataprocStartClusterOperator
-from airflow.providers.google.cloud.operators.dataproc import DataprocStopClusterOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitJobOperator
 from airflow.providers.google.cloud.operators.pubsub import PubSubPublishMessageOperator
 
@@ -40,12 +38,6 @@ with DAG(
     start_date=days_ago(1)
 ) as dag:
 
-    start_dp_cluster = DataprocStartClusterOperator(
-        task_id='start_dataproc_cluster',
-        project_id=PROJECT_ID,
-        cluster_name=CLUSTER_NAME,
-        region=REGION
-    )
 
     submit_pyspark_job_1 = DataprocSubmitJobOperator(
         task_id='postgres_to_parquet',
@@ -61,13 +53,6 @@ with DAG(
         project_id=PROJECT_ID
     )
 
-    stop_dp_cluster = DataprocStopClusterOperator(
-        task_id='stop_dataproc_cluster',
-        project_id=PROJECT_ID,
-        cluster_name=CLUSTER_NAME,
-        region=REGION
-    )
-
     notify_pubsub = PubSubPublishMessageOperator(
         task_id='notify_pubsub',
         topic=PUBSUB_TOPIC,
@@ -76,4 +61,4 @@ with DAG(
     )
 
 
-    start_dp_cluster >> submit_pyspark_job_1 >> submit_pyspark_job_2 >> stop_dp_cluster >> notify_pubsub
+    submit_pyspark_job_1 >> submit_pyspark_job_2 >> notify_pubsub

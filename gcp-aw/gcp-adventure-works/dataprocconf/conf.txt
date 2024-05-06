@@ -1,4 +1,4 @@
-gcloud dataproc clusters create test-cluster \
+gcloud dataproc clusters create aw-cluster \
   --region us-central1 \
   --initialization-actions gs://shell-scripts-vk/cloud-sql-proxy.sh \
   --public-ip-address \

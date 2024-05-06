@@ -122,6 +122,18 @@ sales_order_header_schema = StructType([
     StructField('modifieddate', TimestampType(), True)
     ])
 
+sales_order_header_sales_reason_schema = StructType([
+    StructField('salesorderid', IntegerType(), True),
+    StructField('salesreasonid', IntegerType(), True),
+    StructField('modifieddate', TimestampType(), True)
+    ])
+
+sales_reason_schema = StructType([
+    StructField('salesreasonid', IntegerType(), True),
+    StructField('name', StringType(), True),
+    StructField('reasontype', StringType(), True),
+    StructField('modifieddate', TimestampType(), True)
+    ])
 
 sales_person_schema = StructType([
     StructField('businessentityid', IntegerType(), True),
@@ -169,6 +181,15 @@ special_offer_product_schema = StructType([
     StructField('modifieddate', TimestampType(), True)
     ])
 
+store_schema = StructType([
+    StructField('businessentityid', IntegerType(), True),
+    StructField('name', StringType(), True),
+    StructField('salespersonid', IntegerType(), True),
+    StructField('demographics', StringType(), True),
+    StructField('rowguid', StringType(), True),
+    StructField('modifieddate', TimestampType(), True)
+    ])
+
 address_schema = StructType([
     StructField('addressid', IntegerType(), True),
     StructField('addressline1', StringType(), True),
@@ -201,6 +222,34 @@ ship_method_schema = StructType([
     StructField('modifieddate', TimestampType(), True)
     ])
 
+product_schema = StructType([
+    StructField('productid', IntegerType(), True),
+    StructField('name', StringType(), True),
+    StructField('productnumber', StringType(), True),
+    StructField('makeflag', BooleanType(), True),
+    StructField('finishedgoodsflag', BooleanType(), True),
+    StructField('color', StringType(), True),
+    StructField('safetystocklevel', ShortType(), True),
+    StructField('reorderpoint', ShortType(), True),
+    StructField('standardcost', DecimalType(38, 18), True),
+    StructField('listprice', DecimalType(38, 18), True),
+    StructField('size', StringType(), True),
+    StructField('sizeunitmeasurecode', StringType(), True),
+    StructField('weightunitmeasurecode', StringType(), True),
+    StructField('weight', DecimalType(8, 2), True),
+    StructField('daystomanufacture', IntegerType(), True),
+    StructField('productline', StringType(), True),
+    StructField('class', StringType(), True),
+    StructField('style', StringType(), True),
+    StructField('productsubcategoryid', IntegerType(), True),
+    StructField('productmodelid', IntegerType(), True),
+    StructField('sellstartdate', TimestampType(), True),
+    StructField('sellenddate', TimestampType(), True),
+    StructField('discontinueddate', TimestampType(), True),
+    StructField('rowguid', StringType(), True),
+    StructField('modifieddate', TimestampType(), True)
+    ])
+
 # ------------------------------
 # Import tables
 # ------------------------------
@@ -212,13 +261,17 @@ currency_rate_df = import_df('sales.currencyrate', currency_rate_schema)
 customer_df = import_df('sales.customer', customer_schema)
 sales_order_detail_df = import_df('sales.salesorderdetail', sales_order_detail_schema)
 sales_order_header_df = import_df('sales.salesorderheader', sales_order_header_schema)
+sales_order_header_sales_reason_df = import_df('sales.salesorderheadersalesreason', sales_order_header_sales_reason_schema)
+sales_reason_df = import_df('sales.salesreason', sales_reason_schema)
 sales_person_df = import_df('sales.salesperson', sales_person_schema)
 sales_territory_df = import_df('sales.salesterritory', sales_territory_schema)
 special_offer_df = import_df('sales.specialoffer', special_offer_schema)
 special_offer_product_df = import_df('sales.specialofferproduct', special_offer_product_schema)
+store_df = import_df('sales.store', store_schema)
 address_df = import_df('person.address', address_schema)
 stateprovince_df = import_df('person.stateprovince', stateprovince_schema)
 ship_method_df = import_df('purchasing.shipmethod', ship_method_schema)
+product_df = import_df('production.product', product_schema)
 
 # ------------------------------
 # Export tables
@@ -231,12 +284,16 @@ export_df(currency_rate_df, 'sales/currencyrate')
 export_df(customer_df, 'sales/customer')
 export_df(sales_order_detail_df, 'sales/salesorderdetail')
 export_df(sales_order_header_df, 'sales/salesorderheader')
+export_df(sales_order_header_sales_reason_df, 'sales/salesorderheadersalesreason')
+export_df(sales_reason_df, 'sales/salesreason')
 export_df(sales_person_df, 'sales/salesperson')
 export_df(sales_territory_df, 'sales/salesterritory')
 export_df(special_offer_df, 'sales/specialoffer')
 export_df(special_offer_product_df, 'sales/specialofferproduct')
+export_df(store_df, 'sales/store')
 export_df(address_df, 'person/address')
 export_df(stateprovince_df, 'person/stateprovince')
 export_df(ship_method_df, 'purchasing/shipmethod')
+export_df(product_df, 'production/product')
 
 spark.stop()
